@@ -1,0 +1,97 @@
+<div class="row col-md-10 col-md-offset-1">
+    <div class="row col-md-2 col-md-offset-5 logo"></div>
+    <div class="row">
+        &nbsp;
+    </div>
+</div>
+
+<div class="row col-md-10 col-md-offset-1">
+<div class="alert alert-success" id="itemAddAlert">
+    <strong>Success!</strong> You have added an item to the cart.
+</div>
+
+<hr/>
+
+<div class="row">&nbsp;</div>
+
+<div class="row" id="pizza-container">
+
+</div>
+<hr/>
+
+<div class="row">
+    <div class="col-md-3">
+        <h4>Customer Service</h4>
+    </div>    
+    <div class="col-md-3">
+        <h4>Store Location</h4>
+    </div>    
+    <div class="col-md-3">
+        <h4>About</h4>
+    </div>
+    <div class="col-md-3">
+        <h4>Contact Us</h4> 
+    </div>
+</div>
+<div class="row">
+    <div class="row col-md-12">
+        <div class="col-md-3">
+            <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Morbi sit amet faucibus leo. Donec consequat tempor risus quis volutpat. Donec dignissim rhoncus felis quis vehicula. Mauris ac est ultricies, scelerisque nisi et, ultrices diam. Duis finibus libero vitae nibh convallis, vel pulvinar tortor semper. Cum sociis natoque penatibus et magnis dis parturient montes, nascetur ridiculus mus. Donec nec aliquam ipsum, quis ornare nisi. Aliquam faucibus maximus quam nec porta.</p>
+        </div>
+        <div class="col-md-3">
+            <p>Antonio's Pizza can be found on the corner of 1st and 2nd street in AnywhereVille, USA. Come join us today with a 20% off coupon!</p>
+        </div>
+        <div class="col-md-3">
+            <p>Antonio's Pizza specializes in creating the best pizza in town. If it's not the best pizza you've ever had we will give you your money back!</p>
+        </div>
+        <div class="col-md-3">
+            <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Morbi sit amet faucibus leo. Donec consequat tempor risus quis volutpat. Donec dignissim rhoncus felis quis vehicula. Mauris ac est ultricies, scelerisque nisi et, ultrices diam. Duis finibus libero vitae nibh convallis, vel pulvinar tortor semper. Cum sociis natoque penatibus et magnis dis parturient montes, nascetur ridiculus mus. Donec nec aliquam ipsum, quis ornare nisi. Aliquam faucibus maximus quam nec porta.</p>
+        </div>
+    </div>
+</div>
+<hr/>
+
+<div class="row col-md-2 col-md-offset-5 logo"></div>
+</div>
+
+
+<script type="text/javascript">
+$(document).ready(function(){
+    $("#itemAddAlert").hide();
+    var pizzaContainer = $("#pizza-container");
+
+    //Loop through pizzas array and create bootstrap wells
+    for(pizza of pizzas){
+        pizzaContainer.append(`
+            <div class="col-md-4">
+                <div class="well">
+                    <div class="row col-md-12">
+                        <span class="pizza-type-text">${pizza.type} - $${pizza.price}</span>
+                    </div>
+                    <hr/>
+                    <div class="row text-center">
+                        <img src="${pizza.img}" width="80%">
+                    </div>
+                    <div class="row">&nbsp;</div>
+                    <div class="row col-md-12 text-center">
+                        <button type="button" class="btn btn-primary addToCart"  name="addToCart_${pizza.type}">Add to Cart</button>
+                    </div>
+                    <div class="row">&nbsp;</div>
+                </div>
+            </div>
+        `);
+    }
+
+    $(".addToCart").click(function(){
+        var type = $(this).attr('name').split("_")[1];
+        var i = pizzas.findIndex(x => x.type == type);
+        addCartItem(pizzas[i]);
+        $("#itemAddAlert").fadeTo(2000, 500).slideUp(500, function(){
+            $("#itemAddAlert").slideUp(500);
+        });
+    });
+
+    updateCart();
+});
+
+</script>

@@ -1,0 +1,42 @@
+body {
+    padding: 10px;
+}
+
+.logo {
+    background-image: url("https://www.myanmore.com/yangon/wp-content/uploads/sites/2/2014/06/TPC-Logo-01.png");
+    background-size: contain;
+    width: 150px;
+    height: 96px;
+}
+
+.menu-item{
+    display: inline-block; 
+    vertical-align: middle;
+    font-size: 1.3em;
+    font-weight: 500;
+    color: red;
+}
+
+.menu-item span{
+    display: inline-block;
+    vertical-align: middle;
+}
+
+.pizza-image{  
+    background-size: cover;
+    width: 175px;
+    height: 175px;
+    margin: 0 auto;
+    margin-top: 10px;
+    margin-bottom: 10px;
+}
+
+.pizza-text{
+    font-size: 1.3em;
+}
+
+.pizza-type-text{
+    font-weight: bold;
+    font-size: 1.5em;
+}
+

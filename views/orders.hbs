@@ -1,0 +1,85 @@
+<div class="panel panel-info" >
+    <div class="panel-heading">
+        <div class="panel-title">Employee Page: View Orders</div>
+    </div>
+    <div style="padding-top:30px" class="panel-body" >  
+        <table class="table table-striped table-hover table-responsive">
+            <thead>
+                <tr>
+                    <th>
+                        Order ID#
+                    </th>
+                    <th>
+                        Phone Number
+                    </th>
+                    <th>
+                        Cart Items
+                    </th>
+                </tr>
+            </thead>
+            <tbody id="summaryBody">
+                
+            </tbody>
+            <tfoot id="summaryFooter">
+                
+            </tfoot>
+        </table>
+    </div>
+</div>
+
+<script type="text/javascript">
+$(document).ready(function(){
+    updateCart();
+    
+    var admin = prompt("Enter the employee (admin) password:", "password123");
+    if(admin != null){
+        //test
+    } else {
+        alert("Incorrect password!");
+        window.location = '/';
+    }
+
+
+    var xhr = new XMLHttpRequest();
+    var url = "/getOrderSummary";
+    xhr.open("POST", url, true);
+    xhr.setRequestHeader("Content-type", "application/json");
+    xhr.onreadystatechange=function(){
+        if (xhr.readyState==4 && xhr.status==200){
+            var totalQuantity = 0;
+            var totalPrice = 0;
+
+            var obj=JSON.parse(xhr.responseText);
+            var html = $("#summaryBody");
+            for(i of obj){
+                var orderHTML = "<ul>";
+                for(order of i.orders){
+                    orderHTML += `
+                        <li>${order.pizza.type} - x${order.quantity}</li>
+                    `;
+                    totalQuantity += order.quantity;
+                    totalPrice += (order.quantity * order.pizza.price);
+                }
+                orderHTML += "</ul>"
+
+                html.append(`
+                    <tr>
+                        <td>${i._id}</td>
+                        <td>${i.phoneNumber}</td>
+                        <td>${orderHTML}</td>
+                    </tr>
+                `);
+            }
+
+            $("#summaryFooter").append(`
+                <tr>
+                    <td colspan=''><strong>Daily totals:</strong></td>
+                    <td colspan='2'><strong>${totalQuantity} pizzas sold for $${totalPrice}</strong></td>
+                </tr>
+            `);
+        }
+    }
+    xhr.send();   
+
+});
+</script>

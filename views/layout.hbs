@@ -1,0 +1,113 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>{{title}}</title>
+    <link rel='stylesheet' href='https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css'/>
+    <link rel='stylesheet' href='/stylesheets/style.css' />
+  </head>
+  <body>
+    <script type="text/javascript" src="https://code.jquery.com/jquery-3.2.1.min.js"></script>
+    <script type="text/javascript" src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+    <script type="text/javascript" src="./javascripts/cart.js"></script>
+    <div class="row col-md-10 col-md-offset-1">
+    <nav class="navbar navbar-default">
+      <div class="container-fluid">
+      <div class="navbar-header">
+          <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#navbar1">
+              <span class="sr-only">Toggle navigation</span>
+              <span class="icon-bar"></span>
+              <span class="icon-bar"></span>
+              <span class="icon-bar"></span>
+          </button>
+      </div>
+      <div id="" class="navbar-collapse collapse">
+          <ul class="nav navbar-nav">
+              <li class="active"><a href="/">Home</a></li>
+              <li><a href="menu">Menu</a></li>
+              <li><a href="signup">Signup/Login</a></li>
+          </ul>
+
+          <ul class="nav navbar-nav navbar-right" data-toggle="modal" data-target="#shoppingCart">
+              <li role="presentation"><a href="#"><span class="glyphicon glyphicon-shopping-cart" aria-hidden="true"></span>  
+              <span class="badge" id="cartQuantity" >Cart (0 items)</span></a></li>
+          </ul>
+      </div>
+      </div>
+      </nav>
+      {{{body}}}
+
+        <div id="shoppingCart" class="modal fade" role="dialog">
+            <div class="modal-dialog">
+            <!-- Modal content-->
+            <div class="modal-content">
+                <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal">&times;</button>
+                <h4 class="modal-title">Orders</h4>
+                </div>
+                <div class="modal-body" id="">
+                <table class="table table-striped" id="tblGrid">
+                    <thead id="tblHead">
+                        <tr>
+                            <th>Menu Item</th>
+                            <th>Quantity</th>
+                            <th class="">Price</th>
+                            <th>Action</th>
+                        </tr>
+                    </thead>
+                    <tbody id='cartBody'>
+                    </tbody>
+                    <tfoot>
+                        <tr>
+                            <td class="strong text-right" colspan="3">Order Total:</td>
+                            <td id="cartOrderTotal"></td>
+                        </tr>
+                    </tfoot>
+                </table>
+                <span><input type="text" id="phoneNumber" placeholder="Phone number.." class="form-control"/></span>
+                </div>
+                <div class="modal-footer">
+                <button type="button" id="placeOrder" class="btn btn-primary">Place Order</button>
+                <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+                </div>
+            </div>
+            </div>
+        </div>
+
+    </div>
+  </body>
+</html>
+
+<script type="text/javascript">
+$(document).ready(function(){
+    $("#placeOrder").click(function(){
+        if(cartItems.length){ //if the cart isn't empty
+            var phone = $("#phoneNumber").val();
+            if(phone.length > 7){
+                var xhr = new XMLHttpRequest();
+                var url = "/placeOrder";
+                var data = JSON.stringify({"phone": phone, "cart": cartItems});
+                xhr.open("POST", url, true);
+                xhr.setRequestHeader("Content-type", "application/json");
+                xhr.onreadystatechange=function(){
+                    if (xhr.readyState==4 && xhr.status==200){
+                        var obj=JSON.parse(xhr.responseText);
+                        if(obj){
+                            alert("Your order has been placed! You will be redirected back to our home page.");
+                            cartItems = [];
+                            updateCart();
+                            window.location = "/";
+                        } else {
+                            alert("An error occured. Please try again!");
+                        }
+                    }
+                }
+                xhr.send(data);
+            } else {
+                alert("Please enter a valid phone number first!");
+            }
+        } else {
+            alert("You have no items in your cart!");
+        }
+    });
+});
+</script>
